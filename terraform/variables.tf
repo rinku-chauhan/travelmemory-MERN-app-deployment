@@ -39,3 +39,9 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "availability_zone" {
+  description = "Availability Zone"
+  type        = string
+  default     = "ap-south-1a"
+}
