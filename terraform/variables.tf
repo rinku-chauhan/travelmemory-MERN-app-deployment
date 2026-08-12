@@ -16,6 +16,12 @@ variable "environment" {
   default     = "Learning"
 }
 
+variable "owner" {
+  description = "Owner of the infrastructure"
+  type        = string
+  default     = "Rinku Chauhan"
+}
+
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
   type        = string
@@ -34,14 +40,13 @@ variable "private_subnet_cidr" {
   default     = "10.0.2.0/24"
 }
 
-variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
-  default     = "t3.micro"
-}
-
 variable "availability_zone" {
   description = "Availability Zone"
   type        = string
   default     = "ap-south-1a"
+}
+
+variable "my_public_ip" {
+  description = "Public IP allowed to SSH"
+  type        = string
 }

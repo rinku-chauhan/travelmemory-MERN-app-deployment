@@ -17,3 +17,15 @@ output "internet_gateway_id" {
 output "nat_gateway_id" {
   value = module.networking.nat_gateway_id
 }
+
+output "web_public_ip" {
+  value = module.compute.web_public_ip
+}
+
+output "web_private_ip" {
+  value = module.compute.web_private_ip
+}
+
+output "db_private_ip" {
+  value = module.compute.db_private_ip
+}

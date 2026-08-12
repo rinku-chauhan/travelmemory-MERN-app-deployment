@@ -147,3 +147,10 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 terraform.tfvars
+generated-key.pem
+# Terraform generated files
+terraform/generated/
+*.pem
+
+# macOS
+.DS_Store
