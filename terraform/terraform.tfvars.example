@@ -1,0 +1,44 @@
+# ==========================================
+# AWS Configuration
+# ==========================================
+
+aws_region = "ap-south-1"
+
+# ==========================================
+# Project Configuration
+# ==========================================
+
+project_name = "travelmemory"
+environment  = "dev"
+
+# ==========================================
+# Networking
+# ==========================================
+
+vpc_cidr            = "10.0.0.0/16"
+public_subnet_cidr  = "10.0.1.0/24"
+private_subnet_cidr = "10.0.2.0/24"
+
+# ==========================================
+# EC2 Configuration
+# ==========================================
+
+web_instance_type = "t2.micro"
+db_instance_type  = "t2.micro"
+
+key_name = "generated-key"
+
+# ==========================================
+# SSH Access
+# Replace with your own public IP
+# Example:
+# my_public_ip = "YOUR_PUBLIC_IP/32"
+# ==========================================
+
+my_public_ip = "YOUR_PUBLIC_IP/32"
+
+# ==========================================
+# Resource Tags
+# ==========================================
+
+owner = "Project Owner"

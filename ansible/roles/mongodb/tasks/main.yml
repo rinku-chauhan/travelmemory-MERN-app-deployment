@@ -1,0 +1,48 @@
+---
+- name: Download MongoDB GPG key
+  ansible.builtin.get_url:
+    url: https://pgp.mongodb.com/server-8.0.asc
+    dest: /tmp/mongodb.asc
+    mode: "0644"
+  become: yes
+
+- name: Convert MongoDB GPG key
+  ansible.builtin.shell: |
+    gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg /tmp/mongodb.asc
+  args:
+    creates: /usr/share/keyrings/mongodb-server-8.0.gpg
+  become: yes
+
+- name: Add MongoDB repository
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/mongodb-org-8.0.list
+    content: |
+      deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse
+    mode: "0644"
+  become: yes
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  become: yes
+
+- name: Install MongoDB
+  ansible.builtin.apt:
+    name: mongodb-org
+    state: present
+  become: yes
+
+- name: Enable MongoDB service
+  ansible.builtin.systemd:
+    name: mongod
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Configure MongoDB to listen on all interfaces
+  ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp: '^\s*bindIp:.*'
+    replace: '  bindIp: 0.0.0.0'
+  notify: Restart MongoDB
+  become: yes

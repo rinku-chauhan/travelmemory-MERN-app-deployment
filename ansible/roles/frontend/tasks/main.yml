@@ -1,0 +1,51 @@
+---
+- name: Create frontend application directory
+  ansible.builtin.file:
+    path: /opt/travelmemory/frontend
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+
+- name: Copy frontend source code
+  ansible.posix.synchronize:
+    src: "{{ playbook_dir }}/../../frontend/"
+    dest: /opt/travelmemory/frontend/
+    delete: yes
+    rsync_opts:
+      - "--exclude=node_modules"
+      - "--exclude=build"
+  delegate_to: localhost
+  become: false
+
+- name: Set frontend directory ownership
+  ansible.builtin.file:
+    path: /opt/travelmemory/frontend
+    owner: ubuntu
+    group: ubuntu
+    recurse: yes
+
+- name: Install frontend dependencies
+  community.general.npm:
+    path: /opt/travelmemory/frontend
+  become_user: ubuntu
+
+- name: Build React application
+  ansible.builtin.command:
+    cmd: npm run build
+    chdir: /opt/travelmemory/frontend
+  become_user: ubuntu
+
+- name: Create Nginx web root
+  ansible.builtin.file:
+    path: /var/www/travelmemory
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0755"
+
+- name: Copy React build to Nginx web root
+  ansible.builtin.copy:
+    src: /opt/travelmemory/frontend/build/
+    dest: /var/www/travelmemory/
+    remote_src: true

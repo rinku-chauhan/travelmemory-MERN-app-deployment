@@ -1,0 +1,43 @@
+---
+- name: Create application directory
+  ansible.builtin.file:
+    path: /opt/travelmemory/backend
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+  become: yes
+
+- name: Copy backend source code
+  ansible.posix.synchronize:
+    src: "{{ playbook_dir }}/../../backend/"
+    dest: /opt/travelmemory/backend/
+    rsync_opts:
+      - "--exclude=node_modules"
+      - "--exclude=.git"
+      - "--exclude=.env"
+  delegate_to: localhost
+  become: false
+
+- name: Set backend directory ownership
+  ansible.builtin.file:
+    path: /opt/travelmemory/backend
+    owner: ubuntu
+    group: ubuntu
+    recurse: yes
+  become: yes
+
+- name: Create backend environment file
+  ansible.builtin.template:
+    src: env.j2
+    dest: /opt/travelmemory/backend/.env
+    owner: ubuntu
+    group: ubuntu
+    mode: "0600"
+  become: yes
+
+- name: Install backend dependencies
+  community.general.npm:
+    path: /opt/travelmemory/backend
+  become: yes
+  become_user: ubuntu
