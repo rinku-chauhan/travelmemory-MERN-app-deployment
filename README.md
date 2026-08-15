@@ -1,17 +1,25 @@
-![Terraform](https://img.shields.io/badge/Terraform-IaC-623CE4?logo=terraform&logoColor=white)
-![Ansible](https://img.shields.io/badge/Ansible-Automation-EE0000?logo=ansible&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-Cloud-232F3E?logo=amazonaws&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green)
+<div align="center">
 
 # TravelMemory Deployment using Terraform and Ansible
 
-A modular Infrastructure as Code (IaC) project that provisions AWS infrastructure with Terraform and automates deployment of a MERN application using Ansible.
+### Automated AWS infrastructure provisioning and MERN application deployment using Terraform and Ansible
 
+![Terraform](https://img.shields.io/badge/Terraform-IaC-7B42BC?logo=terraform&logoColor=white)
+![Ansible](https://img.shields.io/badge/Ansible-Automation-EE0000?logo=ansible&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Cloud-232F3E?logo=amazonaws&logoColor=white)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?logo=node.js&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb&logoColor=white)
+![NGINX](https://img.shields.io/badge/NGINX-Web_Server-009639?logo=nginx&logoColor=white)
+![MIT License](https://img.shields.io/badge/License-MIT-000000)
+
+</div>
 ---
 
 ## Table of Contents
 
 - [Project Overview](#project-overview)
+- [Project Evolution](#project-evolution)
 - [Key Features](#key-features)
 - [Solution Architecture](#solution-architecture)
 - [Technology Stack](#technology-stack)
