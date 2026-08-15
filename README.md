@@ -1,434 +1,243 @@
-# Production-style MERN Application Deployment on AWS EC2
+![Terraform](https://img.shields.io/badge/Terraform-IaC-623CE4?logo=terraform&logoColor=white)
+![Ansible](https://img.shields.io/badge/Ansible-Automation-EE0000?logo=ansible&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Cloud-232F3E?logo=amazonaws&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-<p align="left">
+# TravelMemory Deployment using Terraform and Ansible
 
-  <img src="https://img.shields.io/badge/AWS-EC2-orange?style=for-the-badge" height="40"/>
-
-  <img src="https://img.shields.io/badge/NGINX-Reverse_Proxy-green?style=for-the-badge" height="40"/>
-
-  <img src="https://img.shields.io/badge/React-Frontend-blue?style=for-the-badge" height="40"/>
-
-  <img src="https://img.shields.io/badge/Node.js-Backend-brightgreen?style=for-the-badge" height="40"/>
-
-  <img src="https://img.shields.io/badge/MongoDB-Database-darkgreen?style=for-the-badge" height="40"/>
-
-  <img src="https://img.shields.io/badge/Cloudflare-DNS-orange?style=for-the-badge" height="40"/>
-
-  <img src="https://img.shields.io/badge/PM2-Process_Manager-yellow?style=for-the-badge" height="40"/>
-
-</p>
-
-# Project Overview
-
-The TravelMemory application is a full-stack MERN application deployed on AWS infrastructure using:
-
-- EC2 Instances
-- Nginx
-- PM2
-- Application Load Balancer (ALB)
-- MongoDB Atlas
-- Cloudflare
+A modular Infrastructure as Code (IaC) project that provisions AWS infrastructure with Terraform and automates deployment of a MERN application using Ansible.
 
 ---
 
-# Objective
+## Table of Contents
 
-The objective of this project was to:
-
-- Deploy the MERN stack application on AWS EC2
-- Configure backend and frontend services
-- Enable frontend-backend communication
-- Configure reverse proxy using Nginx
-- Implement load balancing using AWS ALB
-- Connect a custom domain using Cloudflare
-- Create scalable and resilient architecture
+- [Project Overview](#project-overview)
+- [Key Features](#key-features)
+- [Solution Architecture](#solution-architecture)
+- [Technology Stack](#technology-stack)
+- [Repository Structure](#repository-structure)
+- [Prerequisites](#prerequisites)
+- [Deployment Workflow](#deployment-workflow)
+- [Validation](#validation)
+- [Cleanup Infrastructure](#cleanup-infrastructure)
+- [Project Screenshots](#project-screenshots)
+- [Future Improvements](#future-improvements)
+- [Author](#author)
+- [License](#license)
 
 ---
 
-# Technology Stack
+## Project Overview
 
-| Component | Technology |
-|---|---|
-| Frontend | React.js |
-| Backend | Node.js + Express.js |
-| Database | MongoDB Atlas |
-| Web Server | Nginx |
+This project automates the deployment of the TravelMemory MERN application on AWS using Infrastructure as Code (Terraform) and Configuration Management (Ansible).
+
+Terraform provisions the AWS infrastructure, while Ansible configures the application stack by installing dependencies, deploying the backend and frontend, configuring MongoDB, managing the application with PM2, and serving the React application through NGINX.
+
+The project demonstrates a modular, reusable, and automated approach to deploying a multi-tier MERN application on AWS.
+
+---
+
+## Project Evolution
+
+This project builds upon a previously completed manual deployment of the TravelMemory MERN application on AWS.
+
+The application stack (React, Express.js, MongoDB, PM2, and NGINX) remains the same, while the deployment process has been transformed from a manual, command-driven workflow into an automated Infrastructure as Code solution using Terraform and Ansible.
+
+The result is a repeatable, modular, and automated deployment process that provisions infrastructure, configures servers, deploys the application, validates the deployment, and supports clean infrastructure teardown using `terraform destroy`.
+
+### Evolution of the Deployment Architecture
+
+| Manual Deployment | Automated Deployment |
+|-------------------|----------------------|
+| [View Manual Architecture](docs/architecture/01-manual-deployment-architecture.png) | [View Terraform + Ansible Architecture](docs/architecture/02-terraform-ansible-architecture.png) |
+
+---
+
+## Key Features
+
+- Modular Terraform infrastructure using reusable modules.
+- Automated server provisioning with Ansible roles.
+- Multi-tier MERN application deployment.
+- Private database server accessed through a bastion host.
+- Automated backend deployment with PM2.
+- Automated frontend build and deployment with NGINX.
+- Infrastructure validation using Terraform outputs and Ansible verification tasks.
+
+---
+
+## Solution Architecture
+
+![Terraform and Ansible Architecture](docs/architecture/02-terraform-ansible-architecture.png)
+
+---
+
+### Architecture Highlights
+
+The following architecture illustrates how Terraform provisions the AWS infrastructure and how Ansible automates the configuration and deployment of the TravelMemory MERN application.
+
+- Modular Terraform infrastructure
+- Public Web Server and Private MongoDB Server
+- Bastion Host access using SSH Agent Forwarding
+- Automated configuration using Ansible Roles
+- React frontend served through NGINX
+- Backend managed using PM2
+
+---
+
+## Technology Stack
+
+| Category | Technologies |
+|----------|--------------|
+| Cloud | AWS |
+| Infrastructure as Code | Terraform |
+| Configuration Management | Ansible |
+| Operating System | Ubuntu |
+| Frontend | React |
+| Backend | Node.js, Express.js |
+| Database | MongoDB |
+| Web Server | NGINX |
 | Process Manager | PM2 |
-| Cloud Platform | AWS EC2 |
-| Load Balancer | AWS Application Load Balancer |
-| DNS & SSL | Cloudflare |
+| Version Control | Git & GitHub |
 
 ---
 
-# Architecture Overview
+## Repository Structure
 
-The deployment architecture consists of:
+```text
+.
+├── ansible/                     # Ansible playbooks, inventory, and reusable roles
+├── backend/                     # Express.js backend application
+├── docs/
+│   ├── architecture/            # Architecture diagrams
+│   └── screenshots/
+│       ├── automated-deployment/# Terraform, Ansible, AWS, and application screenshots
+│       └── manual-deployment/   # Manual deployment reference screenshots
+├── frontend/                    # React frontend application
+├── nginx-config/                # NGINX configuration files
+├── terraform/                   # Terraform modules and infrastructure code
+├── LICENSE
+└── README.md
+```
+---
 
-1. User requests routed through Cloudflare
-2. Cloudflare forwards requests to AWS Application Load Balancer
-3. ALB distributes traffic between two EC2 instances
-4. Each EC2 instance runs:
-   - React Frontend
-   - Node.js Backend
-   - Nginx Reverse Proxy
-   - PM2 Process Manager
-5. Backend communicates with MongoDB Atlas
+## Prerequisites
+
+Before deploying the project, ensure the following tools are installed:
+
+- AWS CLI
+- Terraform
+- Ansible
+- Git
+- SSH Client
+- Node.js and npm (for local frontend development)
 
 ---
 
-# Deployment Architecture Diagram
+## Deployment Workflow
 
-![Deployment Architecture](architecture/Deployment-Architecture-Diagram.png)
+1. Clone the repository.
+2. Configure AWS credentials.
+3. Update `terraform.tfvars` with your environment values.
+4. Provision AWS infrastructure using Terraform.
+5. Generate the Ansible inventory from the Terraform outputs.
+6. Execute the Ansible playbooks to configure the web and database servers.
+7. Deploy the backend and frontend applications.
+8. Validate the application through the web server's public IP address.
 
 ---
 
-# Step 1 — Launch EC2 Instances
+## Validation
 
-## Actions Performed
+The deployment was validated by verifying:
 
-- Created Ubuntu EC2 instances
-- Configured security groups
-- Allowed inbound traffic for:
-  - SSH (22)
-  - HTTP (80)
-  - HTTPS (443)
-  - Custom TCP (3000 if required)
+- Terraform successfully provisioned the AWS infrastructure.
+- Ansible configured both web and database servers.
+- MongoDB service was running.
+- Backend application was managed using PM2.
+- React application was built and served by NGINX.
+- Backend APIs responded successfully.
+- Frontend application was accessible through the web server.
 
-## Commands Used
+### Deployment Verification
+
+| Complete Automated Deployment |
+|-------------------------------|
+| ![](docs/screenshots/automated-deployment/ansible/12-complete-application-deployment.png) |
+
+---
+
+## Cleanup Infrastructure
+
+After validating the deployment, the provisioned AWS infrastructure can be safely removed using Terraform.
 
 ```bash
-ssh -i key.pem ubuntu@<EC2-Public-IP>
+cd terraform
+terraform destroy
 ```
+This project demonstrates the complete Infrastructure as Code lifecycle by provisioning, validating, and cleanly destroying all AWS resources to prevent unnecessary cloud costs.
 
-## Screenshots
-
-### Project Repository
-
-![Project Repository](screenshots/01-Project-Repository.png)
-
-### EC2 Instances Running
-
-![EC2 Instances](screenshots/02-EC2-Instances-running.png)
-
-### Security Group Configuration
-
-![Security Groups](screenshots/03-Security-Groups.png)
+| Destroy Plan | Destroy Complete |
+|--------------|------------------|
+| ![](docs/screenshots/automated-deployment/terraform/17-terraform-destroy-plan.png) | ![](docs/screenshots/automated-deployment/terraform/18-terraform-destroy-complete.png) |
 
 ---
 
-# Step 2 — SSH into EC2
+## Project Screenshots
 
-## Screenshot
+### AWS Infrastructure
 
-![SSH into EC2](screenshots/04-SSH-into-EC2.png)
-
----
-
-# Step 3 — Clone GitHub Repository
-
-## Actions Performed
-
-- Cloned TravelMemory repository into EC2 instance
-
-## Commands Used
-
-```bash
-git clone https://github.com/UnpredictablePrashant/TravelMemory.git
-```
-
-## Screenshot
-
-![Repository Cloning](screenshots/05-Repository-cloning.png)
+| VPC | Web Server | Database Server |
+|-----|------------|-----------------|
+| ![](docs/screenshots/automated-deployment/aws-console/01-vpc-architecture.png) | ![](docs/screenshots/automated-deployment/aws-console/02-ec2-for-web-deployment.png) | ![](docs/screenshots/automated-deployment/aws-console/03-ec2-for-db-deployment.png) |
 
 ---
 
-# Step 4 — Backend Configuration
+### Terraform
 
-## Actions Performed
-
-- Navigated to backend directory
-- Installed dependencies
-- Configured environment variables
-- Connected MongoDB Atlas
-- Started backend using PM2
-
-## Commands Used
-
-```bash
-cd TravelMemory/backend
-npm install
-```
-
-## `.env` Configuration
-
-```env
-PORT=3000
-MONGO_URI=<MongoDB Atlas Connection String>
-```
-
-## Start Backend Using PM2
-
-```bash
-pm2 start index.js --name backend
-pm2 save
-```
-
-## Verification
-
-```bash
-pm2 list
-curl http://localhost:3000/trip
-```
-
-## Screenshots
-
-### Backend Environment Configuration
-
-![Backend ENV](screenshots/06-Backend-.env-file-configuration.png)
-
-### PM2 Backend Running
-
-![PM2 Running](screenshots/07-PM2-showing-backend-running.png)
-
-### Backend API Working
-
-![Backend API](screenshots/08-Backend-API-working.png)
+| Provisioning | Outputs |
+|--------------|---------|
+| ![](docs/screenshots/automated-deployment/terraform/15-compute-apply.png) | ![](docs/screenshots/automated-deployment/terraform/14-terraform-state-and-outputs.png) |
 
 ---
 
-# Step 5 — NGINX Reverse Proxy Configuration
+### Ansible
 
-## Actions Performed
-
-- Installed NGINX
-- Configured reverse proxy
-- Served React build
-- Forwarded backend traffic to Node.js backend
-
-## Commands Used
-
-```bash
-sudo apt install nginx -y
-```
-
-## NGINX Configuration
-
-```nginx
-server {
-    listen 80;
-    server_name _;
-
-    root /home/ubuntu/TravelMemory/frontend/build;
-    index index.html;
-
-    location / {
-        try_files $uri /index.html;
-    }
-
-    location /trip {
-        proxy_pass http://localhost:3000;
-    }
-}
-```
-
-## Enable Site
-
-```bash
-sudo ln -s /etc/nginx/sites-available/travelmemory /etc/nginx/sites-enabled/
-
-sudo nginx -t
-
-sudo systemctl restart nginx
-```
-
-## Screenshot
-
-![NGINX Configuration](screenshots/09-NGINX-Configuration.png)
+| Playbook Execution | Deployment Complete |
+|--------------------|---------------------|
+| ![](docs/screenshots/automated-deployment/ansible/03-common-role-execution.png) | ![](docs/screenshots/automated-deployment/ansible/12-complete-application-deployment.png) |
 
 ---
 
-# Step 6 — Frontend Configuration
+### Application
 
-## Actions Performed
-
-- Navigated to frontend directory
-- Installed frontend dependencies
-- Configured frontend backend URL
-- Generated React production build
-
-## Commands Used
-
-```bash
-cd ~/TravelMemory/frontend
-npm install
-```
-
-## `url.js` Configuration
-
-```javascript
-export const baseUrl = window.location.origin;
-```
-
-## Build React Application
-
-```bash
-npm run build
-```
-
-## Screenshots
-
-### Frontend Build Successful
-
-![Frontend Build](screenshots/10-React-build.png)
-
-### Frontend URL Configuration
-
-![Frontend URL Config](screenshots/11-Frontend-URL-Configuration.png)
+| TravelMemory Application |
+|--------------------------|
+| ![](docs/screenshots/automated-deployment/application/01-react-frontend-homepage.png) |
 
 ---
 
-# Step 7 — Frontend and Backend Integration
+## Future Improvements
 
-## Actions Performed
-
-- Verified frontend communication with backend
-- Tested API integration
-- Verified dynamic trip data rendering
-
-## Verification
-
-```bash
-curl http://localhost/trip
-```
-
-## Screenshot
-
-![Application Working](screenshots/12-Application-working-on-EC2.png)
+- Provision an Application Load Balancer (ALB) using Terraform.
+- Automate DNS management using Amazon Route 53.
+- Configure HTTPS using AWS Certificate Manager (ACM).
+- Store Terraform state remotely using Amazon S3 and DynamoDB.
+- Integrate a CI/CD pipeline using GitHub Actions or Jenkins.
+- Deploy the application using Docker and Kubernetes.
 
 ---
 
-# Step 8 — Scaling the Application
+## Author
 
-## Actions Performed
+**Rinku Chauhan**
 
-- Created second EC2 instance
-- Deployed same application on second server
-- Configured AWS Application Load Balancer
-- Registered both instances into target group
+Senior System Engineer | Aspiring Cloud & DevOps Engineer
 
-## AWS Components Used
-
-- Target Group
-- Application Load Balancer (ALB)
-- Health Checks
-
-## Screenshots
-
-### Elastic IP
-
-![Elastic IP](screenshots/13-Elastic-IP.png)
-
-### Target Group Healthy Targets
-
-![Target Groups](screenshots/14-Target-Groups-health-status.png)
-
-### ALB Active Status
-
-![Load Balancer](screenshots/15-Load-Balancer-configurations.png)
+- GitHub: https://github.com/rinku-chauhan
+- LinkedIn: https://linkedin.com/in/rinku-chauhan
 
 ---
 
-# Step 9 — Domain Setup Using Cloudflare
+## License
 
-## Actions Performed
-
-- Added domain to Cloudflare
-- Updated Namecheap nameservers
-- Configured DNS records
-- Enabled HTTPS
-
-## DNS Records
-
-| Type | Name | Target |
-|---|---|---|
-| CNAME | @ | ALB DNS |
-| CNAME | www | rinku-devops.site |
-| A | frontend | EC2 Elastic IP |
-
----
-
-# SSL Configuration
-
-- SSL Mode: Flexible
-- Always Use HTTPS: Enabled
-
-## Screenshots
-
-### Cloudflare DNS Records
-
-![Cloudflare DNS](screenshots/16-Cloudflare-DNS-page.png)
-
-### Namecheap Nameserver
-
-![Namecheap Nameserver](screenshots/17-Namecheap-Nameserver.png)
-
-### ALB DNS Working
-
-![ALB DNS](screenshots/18-ALB-DNS-working.png)
-
-### Custom Domain and HTTPS Enabled
-
-![HTTPS Enabled](screenshots/19-Custom-domain-and-HTTPS-enabled.png)
-
----
-
-# 🌐 Final Application URLs
-
-| Component | URL |
-|---|---|
-| Main Domain | https://rinku-devops.site |
-| WWW Domain | https://www.rinku-devops.site |
-
----
-
-# Challenges Faced and Resolutions
-
-| Issue | Resolution |
-|---|---|
-| MongoDB authentication failure | Corrected MongoDB Atlas credentials |
-| Backend not running on second EC2 | Started backend using PM2 |
-| React API routing issue | Fixed frontend API URL configuration |
-| NGINX proxy misconfiguration | Corrected proxy_pass configuration |
-| Cloudflare SSL errors | Configured Flexible SSL mode |
-| React map() errors | Fixed API endpoint duplication |
-
----
-
-# Best Practices Implemented
-
-- Reverse proxy using NGINX
-- Process management using PM2
-- Load balancing using AWS ALB
-- HTTPS using Cloudflare
-- Multiple EC2 instances for scalability
-- MongoDB Atlas cloud database
-
----
-
-# Conclusion
-
-The TravelMemory application was successfully deployed on AWS using a scalable architecture.
-
-The deployment includes:
-
-- Multiple EC2 instances
-- Application Load Balancer
-- Cloudflare DNS integration
-- NGINX reverse proxy
-- PM2 process management
-- MongoDB Atlas integration
-
-The application is accessible through a custom domain with HTTPS enabled and supports scalable traffic distribution through AWS ALB.
-
----
-# Thank You
+This project is licensed under the MIT License.
