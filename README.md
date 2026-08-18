@@ -20,7 +20,6 @@
 ## Table of Contents
 
 - [Project Overview](#project-overview)
-- [Project Evolution](#project-evolution)
 - [Key Features](#key-features)
 - [Solution Architecture](#solution-architecture)
 - [Technology Stack](#technology-stack)
@@ -43,22 +42,6 @@ This project automates the deployment of the TravelMemory MERN application on AW
 Terraform provisions the AWS infrastructure, while Ansible configures the application stack by installing dependencies, deploying the backend and frontend, configuring MongoDB, managing the application with PM2, and serving the React application through NGINX.
 
 The project demonstrates a modular, reusable, and automated approach to deploying a multi-tier MERN application on AWS.
-
----
-
-## Project Evolution
-
-This project builds upon a previously completed manual deployment of the TravelMemory MERN application on AWS.
-
-The application stack (React, Express.js, MongoDB, PM2, and NGINX) remains the same, while the deployment process has been transformed from a manual, command-driven workflow into an automated Infrastructure as Code solution using Terraform and Ansible.
-
-The result is a repeatable, modular, and automated deployment process that provisions infrastructure, configures servers, deploys the application, validates the deployment, and supports clean infrastructure teardown using `terraform destroy`.
-
-### Evolution of the Deployment Architecture
-
-| Manual Deployment | Automated Deployment |
-|-------------------|----------------------|
-| [View Manual Architecture](docs/architecture/01-manual-deployment-architecture.png) | [View Terraform + Ansible Architecture](docs/architecture/02-terraform-ansible-architecture.png) |
 
 ---
 
@@ -143,6 +126,8 @@ Before deploying the project, ensure the following tools are installed:
 ---
 
 ## Deployment Workflow
+
+The deployment follows the workflow below:
 
 1. Clone the repository.
 2. Configure AWS credentials.
@@ -232,7 +217,7 @@ This project demonstrates the complete Infrastructure as Code lifecycle by provi
 - Configure HTTPS using AWS Certificate Manager (ACM).
 - Store Terraform state remotely using Amazon S3 and DynamoDB.
 - Integrate a CI/CD pipeline using GitHub Actions or Jenkins.
-- Deploy the application using Docker and Kubernetes.
+- Containerize the application using Docker and evaluate Kubernetes for orchestration.
 
 ---
 
@@ -244,9 +229,20 @@ Senior System Engineer | Aspiring Cloud & DevOps Engineer
 
 - GitHub: https://github.com/rinku-chauhan
 - LinkedIn: https://linkedin.com/in/rinku-chauhan
+- E-mail: rinku.chn20@gmail.com
 
 ---
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
+
+See the [LICENSE](LICENSE) file for more details.
+
+---
+
+<div align="center">
+
+**Thank you**
+
+</div>
